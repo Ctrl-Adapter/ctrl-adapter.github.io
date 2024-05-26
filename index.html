@@ -129,57 +129,24 @@
 				<div class="column is-four-fifths">
 					<h2 class="title is-3">Abstract</h2>
 					<div class="content has-text-justified">
+
 						<p>
-							ControlNets are widely used for adding spatial control in image generation with different
-							conditions, such as depth
-							maps, canny edges, and human poses. However, there are several challenges when leveraging
-							the
-							pretrained image
-							ControlNets for controlled video generation. First, pretrained ControlNet cannot be directly
-							plugged into new backbone
-							models due to the mismatch of feature spaces, and the cost of training ControlNets for new
-							backbones is a big burden for
-							many users. Second, ControlNet features for different frames might not effectively handle
-							the
-							temporal consistency of
-							objects.
+							ControlNets are widely used for adding spatial control to text-to-image diffusion models with different conditions, such
+							as depth maps, scribbles/sketches, and human poses. However, when it comes to controllable video generation, ControlNets
+							cannot be directly integrated into new backbones due to feature space mismatches, and training ControlNets for new
+							backbones can be a significant burden for many users. Furthermore, applying ControlNets independently to different
+							frames cannot effectively maintain object temporal consistency.
 						</p>
 						<p>
-							To address these challenges, we introduce <b>Ctrl-Adapter</b>, <i>an efficient and versatile
-								framework that adds diverse
-								controls to any image/video diffusion models, by adapting pretrained ControlNets (and
-								improving temporal alignment for
-								videos).</i> Ctrl-Adapter provides strong and diverse capabilities including image
-							control,
-							video control, video control
-							with sparse frames, multi-condition control, compatibility with different backbone models,
-							adaptation to unseen control
-							conditions, and video editing. In the Ctrl-Adapter framework, we train adapter layers that
-							fuse
-							pretrained ControlNet
-							features to different image/video diffusion models, while keeping the parameters of the
-							ControlNets and the diffusion
-							models frozen. Ctrl-Adapter consists of temporal as well as spatial modules so that it can
-							effectively handle the
-							temporal consistency of videos. Additionally, for robust adaptation to different backbone
-							models
-							and sparse control, we
-							propose latent skipping and inverse timestep sampling. Moreover, Ctrl-Adapter enables
-							control
-							from multiple conditions
-							by simply taking the (weighted) average of ControlNet outputs.
-						</p>
-						<p>
-							From our experiments with diverse image and video
-							diffusion backbones (SDXL, Hotshot-XL, I2VGen-XL, and SVD), Ctrl-Adapter matches ControlNet
-							on
-							the COCO dataset for
-							image control, and even outperforms all baselines for video control (achieving the
-							state-of-the-art accuracy on the
-							DAVIS 2017 dataset) with significantly lower computational costs (Ctrl-Adapter outperforms
-							baselines in less than 10 GPU
-							hours). Lastly, we provide comprehensive ablations for our design choices and qualitative
-							examples.
+							To address these challenges, we introduce <b>Ctrl-Adapter</b>,
+							<i>an efficient and versatile framework that adds diverse controls to any image/video diffusion model through the
+							adaptation of pretrained ControlNets.</i> Ctrl-Adapter offers strong and diverse capabilities, including image and video
+							control, sparse-frame video control, fine-grained patch-level multi-condition control (via an MoE router), zero-shot
+							adaptation to unseen conditions, and supports a variety of downstream tasks beyond spatial control, including video
+							editing, video style transfer, and text-guided motion control. With six diverse U-Net/DiT-based image/video diffusion
+							models (SDXL, PixArt-α,  I2VGen-XL, SVD, Latte, Hotshot-XL), Ctrl-Adapter matches the performance of pretrained
+							ControlNets on COCO and achieves the state-of-the-art on DAVIS 2017 with significantly lower computation (< 10 GPU
+							hours).
 						</p>
 
 					</div>
@@ -1668,7 +1635,7 @@
 					<br><br>
 
 					<div class="content is-centered has-text-centered">
-						<h3 class="example-heading">Image Generation with Condition Control (w/ SDX:; U-Net based)</h3>
+						<h3 class="example-heading">Image Generation with Condition Control (w/ SDXL; U-Net based)</h3>
 						<hr>
 
 						<div style="max-width: 1200px;margin: auto;">
@@ -2046,10 +2013,7 @@
 							Ctrl-Adapter supports diverse capabilities including image control, video control, video
 							control
 							with sparse frames, multi-condition control,
-							compatibility with different backbone models, adaptation to unseen control conditions, and
-							video
-							editing,
-							while previous methods support only some
+							compatibility with different backbone models, while previous methods support only support a small subset
 							of them.
 						</p>
 					</div>
@@ -2107,7 +2071,7 @@
 					<h3 class="title is-4">Video Generation from Multiple Conditions</h3>
 
 					<img src="./static/images/moe_method.png" alt="Video Generation from Multiple Conditions"
-						width="45%">
+						width="65%">
 					<br><br>
 
 					<div class="content has-text-justified">
@@ -2116,12 +2080,8 @@
 							control
 							features of multiple
 							ControlNets via Ctrl-Adapter.
-							We first average the ControlNet output features via learnable
-							scalar weights for each Ctrl-Adapter block, then provide such fused ControlNet features as
-							input
-							to a shared and unified Ctrl-Adapter. The
-							weighted-average approach can be understood
-							as a lightweight mixture-of-experts (MoE).
+							For this, we propose a lightweight mixture-of-experts (MoE) router that takes patch-level inputs and assigns weights to each condition.
+							In our experiments, we find that our MoE router is more effective than equal weights or unconditinoal global weights.
 						</p>
 					</div>
 
@@ -2129,9 +2089,9 @@
 
 					<h3 class="title is-4">Evaluation on Video Control and Image Control with Single Condition</h3>
 
-					<img src="./static/images/table_video_control_single_condition.png" alt="Table - Video/Image Generation from Single Condition" width="44%">
+					<img src="./static/images/table_video_control_single_condition.png" alt="Table - Video/Image Generation from Single Condition" width="43%">
 
-					<img src="./static/images/table_image_control.png" alt="Tabe - Video/Image Generation from Single Condition" width="50%">
+					<img src="./static/images/table_image_control.png" alt="Tabe - Video/Image Generation from Single Condition" width="54%">
 
 					<br><br>
 
@@ -2149,7 +2109,7 @@
 					<h3 class="title is-4">Evaluation on Video Control with Multiple Conditions</h3>
 					
 					<img src="./static/images/table_video_control_multi_conditions.png" alt="Table - Video Generation from Multiple Conditions"
-						width="48%">
+						width="70%">
 
 					<br><br>
 				
@@ -2157,8 +2117,8 @@
 					<div class="content has-text-justified">
 						<p>
 							More conditions improve spatial control in video generation.
-							The proposed linear weight
-							outperforms the equal-weight approach as the number of conditions increases.
+							The proposed patch-level weighting method
+							outperforms the equal-weight approach and unconditin global weighting.
 							The control sources
 							are abbreviated as D (depth map), C (canny edge), N (surface normal), S (softedge), Seg (semantic
 							segmentation map), L (line art), and P (human pose).
@@ -2189,7 +2149,7 @@
 					<h3 class="title is-4">Ablation Study - Skipping Latents from ControlNet Inputs</h3>
 					
 					<div style="display: flex; justify-content: center;">
-						<img src="./static/images/table_ablation_skip_latent.png" alt="training efficiency - video" width="70%">
+						<img src="./static/images/table_ablation_skip_latent.png" alt="training efficiency - video" width="65%">
 					</div>
 					<br><br>
 					
